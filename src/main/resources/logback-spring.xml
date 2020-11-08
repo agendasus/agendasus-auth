@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+<!--    <property resource="application-internal.properties"/>-->
+    <springProperty name="LOGSTASH_HOST" source="logging.logstash.host" defaultValue="localhost" />
+    <springProperty name="LOGSTASH_PORT" source="logging.logstash.port" defaultValue="9090" />
+    <springProperty scope="context" name="appName" source="spring.application.name"/>
+    <contextName>${appName}</contextName>
+    <appender name="stash" class="net.logstash.logback.appender.LogstashUdpSocketAppender">
+        <host>${LOGSTASH_HOST}</host>
+        <!-- port is optional (default value shown) -->
+        <port>${LOGSTASH_PORT}</port>
+        <!-- layout is required -->
+        <layout class="net.logstash.logback.layout.LogstashLayout"></layout>
+    </appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n %green(${appName})
+            </pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="stash" />
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
