@@ -40,7 +40,7 @@ public class UserDTO {
         user.setName(this.name);
         user.setLogin(this.login);
         user.setPassword(this.password);
-        user.setUserType(UserType.valueOf(this.userType));
+        user.setUserType(this.userType != null ? UserType.valueOf(this.userType) : null);
         return user;
     }
 

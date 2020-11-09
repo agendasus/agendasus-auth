@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import static br.com.agendasus.auth.AgendaSUSApp.ADMIN_LOGIN;
 import static br.com.agendasus.auth.v1.infrastructure.enumeration.UserType.ADMIN;
+import static br.com.agendasus.auth.v1.infrastructure.enumeration.UserType.PATIENT;
 
 @Service("userManager")
 public class UserManager {
@@ -45,6 +46,22 @@ public class UserManager {
         UserLogin user = getById(id);
         checkAuthorization(usuarioRequest);
         return user;
+    }
+
+    public void insertPatient(UserLogin user) {
+        try {
+            user.setUserType(PATIENT);
+            setDefaultAttributeToNewLoginUsuario(user);
+            checkPassword(user.getPassword());
+            checkExists(user);
+            user.setPassword(EncriptionUtils.sha1Converter(user.getPassword()));
+            dao.persist(user);
+        } catch (ResponseException e) {
+            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseException("error.generic.insert", "entity.subcontausuario");
+        }
     }
 
     public void insert(UserLogin usuarioRequest, UserLogin user) {

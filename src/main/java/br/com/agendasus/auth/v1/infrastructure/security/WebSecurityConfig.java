@@ -30,7 +30,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/check/token",
             "/forgot-password",
             "/password-recovery",
-            "/invalidate-recovery"
+            "/invalidate-recovery",
+            "/user/userlogin"
     };
 
     @Override

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController("userAccessController")
-@RequestMapping("/user/{userId}/userlogin")
 public class UserAccessController {
 
     @Autowired
@@ -27,15 +26,24 @@ public class UserAccessController {
 
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('MANAGE_USER') OR hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{userId}/userlogin/{id}", method = RequestMethod.GET)
     public Response get(@PathVariable("userId") Long userId, @PathVariable("id") Long id) {
         UserLogin user = business.getById(userId);
         return responseUtils.returnObject(new UserDTO(business.get(user, id)));
     }
 
     @Transactional
+    @RequestMapping(value = "/user/userlogin", method = RequestMethod.POST)
+    public Response create(@RequestBody @Valid UserDTO dto) {
+        UserLogin user = dto.parse(new UserLogin());
+        business.insertPatient(user);
+        dto.setAttributes(user);
+        return responseUtils.returnObject(dto, "success.generic.insert.female", "entity.subcontausuario");
+    }
+
+    @Transactional
     @PreAuthorize("hasAuthority('MANAGE_USER') OR hasAuthority('ADMIN')")
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/{userId}/userlogin", method = RequestMethod.POST)
     public Response create(@PathVariable("userId") Long userId, @RequestBody @Valid UserDTO dto) {
         UserLogin userRequest = business.getById(userId);
         UserLogin user = dto.parse(new UserLogin());
@@ -46,7 +54,7 @@ public class UserAccessController {
 
     @Transactional
     @PreAuthorize("hasAuthority('MANAGE_USER') OR hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/user/{userId}/userlogin/{id}", method = RequestMethod.PUT)
     public Response edit(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody @Valid UserDTO dto) {
         UserLogin userRequest = business.getById(userId);
         UserLogin user = business.getById(id);
@@ -59,7 +67,7 @@ public class UserAccessController {
 
     @Transactional
     @PreAuthorize("hasAuthority('MANAGE_USER') OR hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/user/{userId}/userlogin/{id}", method = RequestMethod.DELETE)
     public Response remove(@PathVariable("userId") Long userId, @PathVariable("id") Long id) {
         UserLogin userRequest = business.getById(userId);
         UserLogin user = business.getById(id);
@@ -69,7 +77,7 @@ public class UserAccessController {
 
     @Transactional
     @PreAuthorize("hasAuthority('MANAGE_USER') OR hasAuthority('ADMIN')")
-    @RequestMapping(value = "/{id}/senha", method = RequestMethod.PUT)
+    @RequestMapping(value = "/user/{userId}/userlogin/{id}/senha", method = RequestMethod.PUT)
     public Response setPassword(@PathVariable("userId") Long userId, @PathVariable("id") Long id, @RequestBody PasswordDTO senhaConfig) {
         UserLogin userRequest = business.getById(userId);
         UserLogin user = business.getById(id);
@@ -78,7 +86,7 @@ public class UserAccessController {
     }
 
     @Transactional
-    @RequestMapping(value = "/conta", method = RequestMethod.PUT)
+    @RequestMapping(value = "/user/{userId}/userlogin/conta", method = RequestMethod.PUT)
     public Response updateAccountBasicInfo(@PathVariable("userId") Long userId, @RequestBody @Valid AccountDTO dadosConta) {
         UserLogin userRequest = business.getById(userId);
         UserLogin userOld = userRequest.getClone();
