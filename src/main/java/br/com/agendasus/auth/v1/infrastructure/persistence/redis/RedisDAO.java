@@ -23,7 +23,7 @@ public class RedisDAO {
     @Autowired
     public void init() {
         final JedisPoolConfig poolConfig = buildPoolConfig();
-        jedisPool = new JedisPool(poolConfig, properties.getRedisHost(), properties.getRedisPort());
+        jedisPool = new JedisPool(poolConfig, properties.getRedisHost(), properties.getRedisPort(), 2000, properties.getRedisPassword());
     }
 
     private JedisPoolConfig buildPoolConfig() {

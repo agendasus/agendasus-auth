@@ -28,7 +28,7 @@ public class SystemProperties {
     @Value("${spring.datasource.password}") private String databasePassword;
     @Value("${spring.redis.host}") private String redisHost;
     @Value("${spring.redis.port}") private Integer redisPort;
-
+    @Value("${spring.redis.password}") private String redisPassword;
 
     public static AgendaSUSUserSecurity defaultUserSecurityAdmin(){
         UserLogin user = new UserLogin();
