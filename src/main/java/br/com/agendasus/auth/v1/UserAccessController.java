@@ -7,6 +7,8 @@ import br.com.agendasus.auth.v1.dto.PasswordDTO;
 import br.com.agendasus.auth.v1.domain.model.UserLogin;
 import br.com.agendasus.auth.v1.infrastructure.response.Response;
 import br.com.agendasus.auth.v1.infrastructure.response.ResponseUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Api(value = "User Access")
 @RestController("userAccessController")
 public class UserAccessController {
 
@@ -24,6 +27,7 @@ public class UserAccessController {
     private ResponseUtils responseUtils;
 
 
+    @ApiOperation(value = "Return basic info about user through id - Just for ADMIN and MANAGE_USER")
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('MANAGE_USER') OR hasAuthority('ADMIN')")
     @RequestMapping(value = "/user/{userId}/userlogin/{id}", method = RequestMethod.GET)
@@ -32,6 +36,7 @@ public class UserAccessController {
         return responseUtils.returnObject(new UserDTO(business.get(user, id)));
     }
 
+    @ApiOperation(value = "Create a patient user")
     @Transactional
     @RequestMapping(value = "/user/userlogin", method = RequestMethod.POST)
     public Response create(@RequestBody @Valid UserDTO dto) {
@@ -41,6 +46,7 @@ public class UserAccessController {
         return responseUtils.returnObject(dto, "success.generic.insert.female", "entity.subcontausuario");
     }
 
+    @ApiOperation(value = "Create an user - Just for ADMIN and MANAGE_USER")
     @Transactional
     @PreAuthorize("hasAuthority('MANAGE_USER') OR hasAuthority('ADMIN')")
     @RequestMapping(value = "/user/{userId}/userlogin", method = RequestMethod.POST)
@@ -52,6 +58,7 @@ public class UserAccessController {
         return responseUtils.returnObject(dto, "success.generic.insert.female", "entity.subcontausuario");
     }
 
+    @ApiOperation(value = "Edit an user - Just for ADMIN and MANAGE_USER")
     @Transactional
     @PreAuthorize("hasAuthority('MANAGE_USER') OR hasAuthority('ADMIN')")
     @RequestMapping(value = "/user/{userId}/userlogin/{id}", method = RequestMethod.PUT)
@@ -65,6 +72,7 @@ public class UserAccessController {
         return responseUtils.returnObject(dto, "success.generic.update.female", "entity.subcontausuario");
     }
 
+    @ApiOperation(value = "Delete an user - Just for ADMIN and MANAGE_USER")
     @Transactional
     @PreAuthorize("hasAuthority('MANAGE_USER') OR hasAuthority('ADMIN')")
     @RequestMapping(value = "/user/{userId}/userlogin/{id}", method = RequestMethod.DELETE)
@@ -75,6 +83,7 @@ public class UserAccessController {
         return responseUtils.returnMessage("success.generic.delete.female", "entity.subcontausuario");
     }
 
+    @ApiOperation(value = "Change an user password - Just for ADMIN and MANAGE_USER")
     @Transactional
     @PreAuthorize("hasAuthority('MANAGE_USER') OR hasAuthority('ADMIN')")
     @RequestMapping(value = "/user/{userId}/userlogin/{id}/senha", method = RequestMethod.PUT)
@@ -85,6 +94,7 @@ public class UserAccessController {
         return responseUtils.returnMessage("success.usuario.senha.update");
     }
 
+    @ApiOperation(value = "Update profile informations of an user")
     @Transactional
     @RequestMapping(value = "/user/{userId}/userlogin/conta", method = RequestMethod.PUT)
     public Response updateAccountBasicInfo(@PathVariable("userId") Long userId, @RequestBody @Valid AccountDTO dadosConta) {

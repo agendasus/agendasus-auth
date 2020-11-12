@@ -2,6 +2,7 @@ package br.com.agendasus.auth.v1;
 
 import br.com.agendasus.auth.v1.domain.usecase.AccessRecovery;
 import br.com.agendasus.auth.v1.infrastructure.response.ResponseUtils;
+import br.com.agendasus.auth.v1.infrastructure.system.EntityManagerConfig;
 import br.com.agendasus.auth.v1.infrastructure.system.SystemProperties;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;

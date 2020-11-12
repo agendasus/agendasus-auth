@@ -31,7 +31,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/forgot-password",
             "/password-recovery",
             "/invalidate-recovery",
-            "/user/userlogin"
+            "/user/userlogin",
+            "/v2/api-docs",
+            "/swagger-ui.html",
+            "/swagger-ui",
+            "/webjars/**",
+            "/swagger-resources/**"
+
     };
 
     @Override

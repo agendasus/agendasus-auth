@@ -6,6 +6,8 @@ import br.com.agendasus.auth.v1.infrastructure.validators.NotNullAndNotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Getter
 @Setter
@@ -14,16 +16,21 @@ public class UserDTO {
     private Long id;
 
     @NotNullAndNotEmpty(message = "crud.validation.required#{label.name}")
+    @JsonInclude(Include.NON_NULL)
     private String name;
 
     @NotNullAndNotEmpty(message = "crud.validation.required#{label.login}")
     @Email(message = "error.generic.field.email#{label.login}")
+    @JsonInclude(Include.NON_NULL)
     private String login;
 
+    @JsonInclude(Include.NON_NULL)
     private String password;
 
+    @JsonInclude(Include.NON_NULL)
     private String userType;
 
+    @JsonInclude(Include.NON_NULL)
     private String permissions;
 
 

@@ -3,6 +3,7 @@ package br.com.agendasus.auth.v1.infrastructure.system;
 import br.com.agendasus.auth.v1.domain.model.UserLogin;
 import br.com.agendasus.auth.v1.infrastructure.security.AgendaSUSUserSecurity;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import static br.com.agendasus.auth.AgendaSUSApp.ADMIN_SENHA;
 import static br.com.agendasus.auth.v1.infrastructure.enumeration.UserType.ADMIN;
 
 @Getter
+@Setter
 @Component
 public class SystemProperties {
 
