@@ -1,6 +1,7 @@
 package br.com.agendasus.auth.v1.domain.usecase;
 
 import br.com.agendasus.auth.v1.domain.model.UserLogin;
+import br.com.agendasus.auth.v1.domain.usecase.notification.NotificationService;
 import br.com.agendasus.auth.v1.infrastructure.persistence.UserLoginDAO;
 import br.com.agendasus.auth.v1.domain.usecase.exceptions.ResponseException;
 import br.com.agendasus.auth.v1.infrastructure.system.EncriptionUtils;
@@ -17,6 +18,9 @@ public class AccessRecovery {
     private SystemProperties properties;
 
     @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
     private UserLoginDAO dao;
 
     public void forgotPassword(String email, String requestIP) {
@@ -27,8 +31,7 @@ public class AccessRecovery {
             dao.merge(userLogin);
             String linkPasswordRecovery = properties.getSystemUrl() + "/password-recovery/" + recoveryPasswordHash;
             String linkInvalidateRecovery = properties.getSystemUrl() + "/invalidate-recovery/" + recoveryPasswordHash;
-            //TODO E-mail sender service
-            //notifyService.sendEmailToPasswordRecovery(userLogin, requestIP, linkPasswordRecovery, linkInvalidateRecovery);
+            notificationService.sendEmailToPasswordRecovery(userLogin, requestIP, linkPasswordRecovery, linkInvalidateRecovery);
         }
     }
 

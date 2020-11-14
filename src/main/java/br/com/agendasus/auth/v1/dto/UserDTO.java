@@ -20,7 +20,7 @@ public class UserDTO {
     private String name;
 
     @NotNullAndNotEmpty(message = "crud.validation.required#{label.login}")
-    @Email(message = "error.generic.field.email#{label.login}")
+    @Email(message = "error.generic.field.dto#{label.login}")
     @JsonInclude(Include.NON_NULL)
     private String login;
 
