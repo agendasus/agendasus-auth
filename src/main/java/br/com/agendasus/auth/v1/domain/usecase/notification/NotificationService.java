@@ -27,7 +27,7 @@ public class NotificationService {
     @HystrixCommand(fallbackMethod = "fallbackSendEmailToPasswordRecovery")
     public void sendEmailToPasswordRecovery(UserLogin userLogin, String requestIP, String linkPasswordRecovery, String linkInvalidateRecovery){
         AccessRecoveryEmailDTO accessRecovery = new AccessRecoveryEmailDTO();
-        accessRecovery.setSubject("AgendaSUS - Recuperação de Senha");
+        accessRecovery.setSubject("AgendaSUS - Esqueceu sua senha?");
         accessRecovery.setRequestIP(requestIP);
         accessRecovery.setLinkPasswordRecovery(linkPasswordRecovery);
         accessRecovery.setLinkInvalidateRecovery(linkInvalidateRecovery);
