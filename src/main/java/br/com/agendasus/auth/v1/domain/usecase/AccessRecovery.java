@@ -29,7 +29,7 @@ public class AccessRecovery {
             String recoveryPasswordHash = UUID.randomUUID().toString();
             userLogin.setHashPasswordRecovery(recoveryPasswordHash);
             dao.merge(userLogin);
-            String linkPasswordRecovery = properties.getSystemUrl() + "/password-recovery/" + recoveryPasswordHash;
+            String linkPasswordRecovery = properties.getAppUrl() + "/password-recovery/" + recoveryPasswordHash;
             String linkInvalidateRecovery = properties.getSystemUrl() + "/invalidate-recovery/" + recoveryPasswordHash;
             notificationService.sendEmailToPasswordRecovery(userLogin, requestIP, linkPasswordRecovery, linkInvalidateRecovery);
         }

@@ -22,6 +22,7 @@ public class SystemProperties {
 
     @Value("${server.port}") private String appPort;
     @Value("${agendasus.system-url}") private String systemUrl;
+    @Value("${agendasus.app-url}") private String appUrl;
     @Value("${agendasus.token-timeout-minutes}") private Integer tokenTimeoutMinutes;
     @Value("${spring.datasource.server}") private String databaseServer;
     @Value("${spring.datasource.port}") private String databasePort;
