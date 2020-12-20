@@ -1,48 +1,77 @@
 package br.com.agendasus.auth.v1;
 
-import br.com.agendasus.auth.v1.domain.usecase.AccessRecovery;
-import br.com.agendasus.auth.v1.infrastructure.security.JwtAuthenticationFilter;
-import br.com.agendasus.auth.v1.infrastructure.system.EntityManagerConfig;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
+import javax.ws.rs.core.MediaType;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WebAppContext.class})
-@WebAppConfiguration
-@TestPropertySource("classpath:application.properties")
-public class AccessRecoveryControllerTest {
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.core.StringContains.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
+@Transactional
+@AutoConfigureMockMvc
+class AccessRecoveryControllerTest {
+
+    @Autowired
+    private AccessRecoveryController accessRecoveryController;
+
+    @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private AccessRecovery accessRecovery;
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @Before
-    public void setUp() {
-        Mockito.reset(this.accessRecovery);
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilters(new JwtAuthenticationFilter()).build();
+    @Test
+    public void contextLoads() throws Exception {
+        assertThat(accessRecoveryController).isNotNull();
     }
 
-    @Ignore
     @Test
-    public void forgotPassword() {
+    public void forgot_password_should_return_bad_request_because_body_is_not_informed() throws Exception {
+        this.mockMvc.perform(post("/forgot-password")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
 
+    @Test
+    public void forgot_password_should_return_ok_because_was_informed_a_body_content() throws Exception {
+        this.mockMvc.perform(post("/forgot-password")
+                .content("someemail@email.com")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void forgot_password_should_return_ok_because_login_exists_and_link_to_renew_password_was_send() throws Exception {
+        this.mockMvc.perform(post("/forgot-password")
+                .content("joao@gmail.com")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void password_recovery_should_return_bad_request_because_body_is_not_informed() throws Exception {
+        this.mockMvc.perform(post("/password-recovery")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void password_recovery_should_return_bad_request_because_hash_informed_is_invalid() throws Exception {
+       this.mockMvc.perform(post("/password-recovery")
+                .content("{\n" +
+                        "    \"hash\": \"some_invalid_hash\",\n" +
+                        "    \"password\": \"123456\"\n" +
+                        "}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string(containsString("Ocorreu um erro, por favor entre em contato com o suporte do AgendaSUS")));
     }
 
 }
