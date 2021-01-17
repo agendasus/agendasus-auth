@@ -35,10 +35,8 @@ public class UserManager {
 
     public void checkAuthorization(UserLogin usuarioRequest) {
         UserLogin loggedUser = login.getUserLogged();
-        if(!loggedUser.isAdmin()) {
-            if(!loggedUser.equals(usuarioRequest)) {
-                throw new ResponseException("error.generic.operation.not.authorized");
-            }
+        if(!loggedUser.isAdmin() && !loggedUser.equals(usuarioRequest)) {
+            throw new ResponseException("error.generic.operation.not.authorized");
         }
     }
 
@@ -113,6 +111,8 @@ public class UserManager {
         try {
             checkAuthorization(userRequest);
             dao.remove(user);
+        } catch (ResponseException e) {
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseException("error.generic.delete", "entity.subcontausuario");
@@ -160,7 +160,7 @@ public class UserManager {
         }
     }
 
-    public void setStatus(UserLogin user) {
+    public void setStatus(final UserLogin user) {
         dao.updateIsActiveFlag(user);
     }
 
